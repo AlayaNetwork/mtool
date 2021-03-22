@@ -9,6 +9,7 @@ compileJava {
 application {
     applicationDefaultJvmArgs = ['-Xms256m','-Dfile.encoding=utf-8']
     mainClassName = "com.platon.mtool.client.MtoolClient"
+    applicationName = "alaya_mtool"
 }
 
 tasks.withType(CreateStartScripts).each { task ->
