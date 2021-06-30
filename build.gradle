@@ -33,9 +33,9 @@ ext {
     // Get abbreviated commit Id of HEAD
     gitAbbRevision = git.head().abbreviatedId
     // sdk version
-    sdkVersion = '0.15.1.11'
+    sdkVersion = '0.16.0.0'
     // sdk发包时间， 无用字段， 测试部门要求添加
-    sdkTime = '2021-02-23'
+    sdkTime = '2021-06-30'
     // timestamp
     buildTimestamp = new Date().format('yyyy-MM-dd HH:mm:ss')
 }
@@ -102,7 +102,7 @@ subprojects {
         compile 'commons-beanutils:commons-beanutils:1.9.4'
         compile 'com.warrenstrange:googleauth:1.4.0'
         compile 'com.alibaba:fastjson:1.2.66'
-        compile "com.platon.sdk:core:${sdkVersion}"
+        compile "com.alaya.sdk:core:${sdkVersion}"
         compile 'org.bitcoinj:bitcoinj-core:0.14.7'
 
     }
