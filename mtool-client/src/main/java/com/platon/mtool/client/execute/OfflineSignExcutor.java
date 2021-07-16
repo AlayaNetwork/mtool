@@ -106,6 +106,13 @@ public class OfflineSignExcutor extends MtoolExecutor<OfflineSignOption> {
         }
         KeystoreConverter converter = new KeystoreConverter(AllParams.KEYSTORE);
         for (Path keystorePath : keystorePaths) {
+            if(
+                keystorePath.getFileName().toString().contains("observed")||
+                keystorePath.getFileName().toString().contains("IGNORE.me")
+            ){
+                // 忽略观察钱包和无效文件
+                continue;
+            }
             //String address = getAddress(keystorePath);
             WalletFile walletFile = WalletUtils.loadWalletFile(keystorePath.toFile());
             String address = walletFile.getAddress();
