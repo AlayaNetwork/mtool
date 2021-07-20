@@ -63,6 +63,10 @@ task copyValidator {
     outputs.file new File("$buildDir/resources/main/validator/restricting_plans.json.example")
 }
 
+task copyKeystore {
+    outputs.file new File("$buildDir/resources/main/keystore")
+}
+
 task copyConfig {
     outputs.file new File("$buildDir/resources/main/config.properties")
 }
@@ -76,17 +80,11 @@ distributions {
             from(copyValidator) {
                 into 'validator'
             }
+            from(copyKeystore) {
+                into 'keystore'
+            }
             from(copyConfig) {
                 into ''
-            }
-            into('') {
-                //create empty folders root directory in distribution root
-                def emptyRoot = new File("$buildDir/emptyFoldersRoot")
-                emptyRoot.mkdirs()
-
-                //create empty folders
-                project.file("$buildDir/emptyFoldersRoot/keystore").mkdirs()
-                from {emptyRoot}
             }
         }
     }

@@ -19,7 +19,6 @@ out
 
 node_modules
 package-lock.json
-keystore
 *.log
 **/logs
 **/rebel.xml
