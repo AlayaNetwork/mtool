@@ -92,8 +92,10 @@ distributions {
     }
 }
 
-/*
 distTar {
-    archiveFileName = "mtool-client_${version}.tar"
+    archiveFileName = application.getApplicationName()+".tar"
 }
-*/
+distZip {
+    archiveFileName = application.getApplicationName()+".zip"
+}
+
