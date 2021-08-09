@@ -66,10 +66,10 @@ public class ObserveIncreaseStakingExecutor extends MtoolExecutor<IncreaseStakin
         new MtoolTransactionManager(web3j, targetChainAddress);
     StakingContract stakingContract = StakingContract.load(web3j, transactionManager);
     GasProvider gasProvider =
-        stakingContract.getAddStakingGasProvider(
-            validatorConfig.getNodePublicKey(),
-            option.getAmount().getAmountType(),
-            option.getAmount().getAmount());
+        checkGasPrice(stakingContract.getAddStakingGasProvider(
+                validatorConfig.getNodePublicKey(),
+                option.getAmount().getAmountType(),
+                option.getAmount().getAmount()));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), option.getAmount().getAmount(), gasProvider, web3j,option.getAmount().getAmountType());
     PlatonSendTransaction transaction =

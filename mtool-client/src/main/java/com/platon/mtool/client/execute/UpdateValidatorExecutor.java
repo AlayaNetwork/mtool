@@ -79,7 +79,7 @@ public class UpdateValidatorExecutor extends MtoolExecutor<UpdateValidatorOption
             .setDetails(option.getDetails())
             .setRewardPer(option.getDelegateRewardPercent())
             .build();
-    GasProvider gasProvider = stakingContract.getUpdateStakingInfoGasProvider(updateStakingParam);
+    GasProvider gasProvider = checkGasPrice(stakingContract.getUpdateStakingInfoGasProvider(updateStakingParam));
     blockChainService.validBalanceEnough(option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction = stakingContract.updateStakingInfoReturnTransaction(updateStakingParam, gasProvider).send();
     TransactionResponse response = stakingContract.getTransactionResponse(transaction).send();

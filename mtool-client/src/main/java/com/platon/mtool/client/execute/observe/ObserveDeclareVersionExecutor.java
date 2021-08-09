@@ -67,9 +67,8 @@ public class ObserveDeclareVersionExecutor extends MtoolExecutor<DeclareVersionO
             web3j, targetChainAddress);
     ProposalContract proposalContract = ProposalContract.load(web3j, transactionManager);
     ProgramVersion programVersion = web3j.getProgramVersion().send().getAdminProgramVersion();
-    GasProvider gasProvider =
-        proposalContract.getDeclareVersionGasProvider(
-            programVersion, validatorConfig.getNodePublicKey());
+    GasProvider gasProvider = checkGasPrice(proposalContract.getDeclareVersionGasProvider(
+            programVersion, validatorConfig.getNodePublicKey()));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =

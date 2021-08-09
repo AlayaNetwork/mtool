@@ -98,7 +98,9 @@ public class CreateRestrictingPlanExecutor extends MtoolExecutor<CreateRestricti
         createRestrictingParam.setPlans(option.getRestrictingConfig().getPlans());
 
         //准备gasLimit/gasPrice
-        GasProvider gasProvider = restrictingPlanContract.getCreateRestrictingPlanGasProvider(createRestrictingParam);
+        GasProvider gasProvider = checkGasPrice(
+                restrictingPlanContract.getCreateRestrictingPlanGasProvider(createRestrictingParam)
+        );
 
         //检查账户余额是否够付手续费（gasLimit*gasPrice)
         blockChainService.validBalanceEnough(option.getKeystore().getAddress(), totalVons, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);

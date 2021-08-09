@@ -76,7 +76,7 @@ public class ObserveSubmitParamProposalExecutor extends MtoolExecutor<SubmitPara
             option.getModule(),
             option.getParamName(),
             option.getParamValue());
-    GasProvider gasProvider = proposalContract.getSubmitProposalGasProvider(proposal);
+    GasProvider gasProvider = checkGasPrice(proposalContract.getSubmitProposalGasProvider(proposal));
     blockChainService.validBalanceEnough(option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =
         proposalContract.submitProposalReturnTransaction(proposal, gasProvider).send();

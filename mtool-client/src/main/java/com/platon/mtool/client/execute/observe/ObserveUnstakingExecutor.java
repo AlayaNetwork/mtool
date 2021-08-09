@@ -65,7 +65,7 @@ public class ObserveUnstakingExecutor extends MtoolExecutor<UnstakingOption> {
             web3j, targetChainAddress);
     StakingContract stakingContract = StakingContract.load(web3j, transactionManager);
     GasProvider gasProvider =
-        stakingContract.getUnStakingGasProvider(validatorConfig.getNodePublicKey());
+        checkGasPrice(stakingContract.getUnStakingGasProvider(validatorConfig.getNodePublicKey()));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =

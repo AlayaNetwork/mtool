@@ -60,11 +60,12 @@ public class VoteVersionProposalExecutor extends MtoolExecutor<VoteVersionPropos
         getProposalContract(web3j, credentials);
     ProgramVersion programVersion = web3j.getProgramVersion().send().getAdminProgramVersion();
     GasProvider gasProvider =
-        proposalContract.getVoteProposalGasProvider(
-            programVersion,
-            VoteOption.YEAS,
-            option.getProposalid(),
-            validatorConfig.getNodePublicKey());
+        checkGasPrice(proposalContract.getVoteProposalGasProvider(
+                programVersion,
+                VoteOption.YEAS,
+                option.getProposalid(),
+                validatorConfig.getNodePublicKey()));
+
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =
@@ -76,9 +77,12 @@ public class VoteVersionProposalExecutor extends MtoolExecutor<VoteVersionPropos
                 VoteOption.YEAS,
                 gasProvider)
             .send();
+
     TransactionResponse response = proposalContract.getTransactionResponse(transaction).send();
 
+    LogUtils.info(logger, () -> Log.newBuilder().msg("VoteVersion").kv("transaction", transaction));
     LogUtils.info(logger, () -> Log.newBuilder().msg("VoteVersion").kv("response", response));
+
     ProgressBar.stop();
     echoResult(
         transaction,

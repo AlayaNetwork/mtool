@@ -66,7 +66,7 @@ public class SubmitParamProposalExecutor extends MtoolExecutor<SubmitParamPropos
             option.getModule(),
             option.getParamName(),
             option.getParamValue());
-    GasProvider gasProvider = proposalContract.getSubmitProposalGasProvider(proposal);
+    GasProvider gasProvider = checkGasPrice(proposalContract.getSubmitProposalGasProvider(proposal));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
 
@@ -74,9 +74,9 @@ public class SubmitParamProposalExecutor extends MtoolExecutor<SubmitParamPropos
         proposalContract.submitProposalReturnTransaction(proposal, gasProvider).send();
     BaseResponse response = proposalContract.getTransactionResponse(transaction).send();
 
-    LogUtils.info(
-        logger,
-        () -> Log.newBuilder().msg(AllCommands.SUBMIT_PARAM_PROPOSAL).kv("response", response));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.SUBMIT_PARAM_PROPOSAL).kv("transaction", transaction));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.SUBMIT_PARAM_PROPOSAL).kv("response", response));
+
     ProgressBar.stop();
     echoResult(
         transaction,

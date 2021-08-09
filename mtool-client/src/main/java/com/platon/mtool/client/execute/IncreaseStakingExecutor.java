@@ -55,10 +55,10 @@ public class IncreaseStakingExecutor extends MtoolExecutor<IncreaseStakingOption
     StakingContract stakingContract =
         getStakingContract(web3j, credentials);
     GasProvider gasProvider =
-        stakingContract.getAddStakingGasProvider(
-            validatorConfig.getNodePublicKey(),
-            option.getAmount().getAmountType(),
-            option.getAmount().getAmount());
+        checkGasPrice(stakingContract.getAddStakingGasProvider(
+                validatorConfig.getNodePublicKey(),
+                option.getAmount().getAmountType(),
+                option.getAmount().getAmount()));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), option.getAmount().getAmount(), gasProvider, web3j, option.getAmount().getAmountType());
     PlatonSendTransaction transaction =
@@ -71,7 +71,11 @@ public class IncreaseStakingExecutor extends MtoolExecutor<IncreaseStakingOption
             .send();
 
     TransactionResponse response = stakingContract.getTransactionResponse(transaction).send();
+
+    LogUtils.info(logger, () -> Log.newBuilder().msg("Increasestaking").kv("transaction", transaction));
     LogUtils.info(logger, () -> Log.newBuilder().msg("Increasestaking").kv("response", response));
+
+
     ProgressBar.stop();
     echoResult(
         transaction,

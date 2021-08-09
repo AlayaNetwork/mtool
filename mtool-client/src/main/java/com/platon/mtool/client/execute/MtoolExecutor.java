@@ -11,6 +11,8 @@ import com.platon.mtool.common.exception.MtoolPlatonException;
 import com.platon.mtool.common.exception.MtoolPlatonExceptionCode;
 import com.platon.mtool.common.utils.PlatOnUnit;
 import com.platon.protocol.core.methods.response.PlatonSendTransaction;
+import com.platon.tx.gas.ContractGasProvider;
+import com.platon.tx.gas.GasProvider;
 
 import java.math.BigInteger;
 
@@ -50,5 +52,15 @@ public abstract class MtoolExecutor<T extends CommonOption> extends CliExecutor<
     } else {
       throw platonException(response.getCode(), nodeId, balance,msgArgs);
     }
+  }
+
+  // 检查GasPrice
+  protected GasProvider checkGasPrice(GasProvider origin){
+    BigInteger gasPrice = origin.getGasPrice();
+    if(gasPrice.compareTo(BigInteger.ZERO)<=0){
+      // 如果gas price <= 0，则设置为默认值
+      return new ContractGasProvider(BigInteger.valueOf(1000000000), origin.getGasLimit());
+    }
+    return origin;
   }
 }

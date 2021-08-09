@@ -88,7 +88,7 @@ public class ObserveUpdateValidatorExecutor extends MtoolExecutor<UpdateValidato
                     .build();
 
     //检查账户是否够手续费
-    GasProvider gasProvider = stakingContract.getUpdateStakingInfoGasProvider(updateStakingParam);
+    GasProvider gasProvider = checkGasPrice(stakingContract.getUpdateStakingInfoGasProvider(updateStakingParam));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
 

@@ -92,8 +92,9 @@ public class TxTransferExecutor extends MtoolExecutor<TransferOption> {
 
     Web3j web3j = getWeb3j(option.getConfig());
     GasProvider gasProvider =
-        GasProviderUtils.getGasProvider(
-            option.getGasProvider(), () -> GasProviderUtils.getTransferGasProvider(web3j));
+        checkGasPrice(
+                GasProviderUtils.getGasProvider(option.getGasProvider(), () -> GasProviderUtils.getTransferGasProvider(web3j))
+        );
 
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(),

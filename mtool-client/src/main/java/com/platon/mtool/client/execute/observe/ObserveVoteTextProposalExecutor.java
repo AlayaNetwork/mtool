@@ -71,11 +71,13 @@ public class ObserveVoteTextProposalExecutor extends MtoolExecutor<VoteTextPropo
     ProposalContract proposalContract = ProposalContract.load(web3j, transactionManager);
     ProgramVersion programVersion = web3j.getProgramVersion().send().getAdminProgramVersion();
     GasProvider gasProvider =
-        proposalContract.getVoteProposalGasProvider(
-            programVersion,
-            option.getOpinion(),
-            option.getProposalid(),
-            validatorConfig.getNodePublicKey());
+        checkGasPrice(
+                proposalContract.getVoteProposalGasProvider(
+                        programVersion,
+                        option.getOpinion(),
+                        option.getProposalid(),
+                        validatorConfig.getNodePublicKey())
+        );
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =

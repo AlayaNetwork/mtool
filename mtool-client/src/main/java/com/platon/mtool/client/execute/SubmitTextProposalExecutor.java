@@ -58,15 +58,16 @@ public class SubmitTextProposalExecutor extends MtoolExecutor<SubmitTextProposal
     Proposal proposal =
         Proposal.createSubmitTextProposalParam(
             validatorConfig.getNodePublicKey(), option.getPidId());
-    GasProvider gasProvider = proposalContract.getSubmitProposalGasProvider(proposal);
+    GasProvider gasProvider = checkGasPrice(proposalContract.getSubmitProposalGasProvider(proposal));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =
         proposalContract.submitProposalReturnTransaction(proposal, gasProvider).send();
     BaseResponse response = proposalContract.getTransactionResponse(transaction).send();
 
-    LogUtils.info(
-        logger, () -> Log.newBuilder().msg("SubmitTextproposal").kv("response", response));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.SUBMIT_TEXT_PROPOSAL).kv("transaction", transaction));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.SUBMIT_TEXT_PROPOSAL).kv("response", response));
+
     ProgressBar.stop();
     echoResult(
         transaction,

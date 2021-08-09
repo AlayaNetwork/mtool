@@ -56,8 +56,8 @@ public class DeclareVersionExecutor extends MtoolExecutor<DeclareVersionOption> 
         getProposalContract(web3j, credentials);
     ProgramVersion programVersion = web3j.getProgramVersion().send().getAdminProgramVersion();
     GasProvider gasProvider =
-        proposalContract.getDeclareVersionGasProvider(
-            programVersion, validatorConfig.getNodePublicKey());
+        checkGasPrice(proposalContract.getDeclareVersionGasProvider(
+                programVersion, validatorConfig.getNodePublicKey()));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =
@@ -67,7 +67,9 @@ public class DeclareVersionExecutor extends MtoolExecutor<DeclareVersionOption> 
             .send();
     TransactionResponse response = proposalContract.getTransactionResponse(transaction).send();
 
+    LogUtils.info(logger, () -> Log.newBuilder().msg("DeclareVersion").kv("transaction", transaction));
     LogUtils.info(logger, () -> Log.newBuilder().msg("DeclareVersion").kv("response", response));
+
     ProgressBar.stop();
     echoResult(
         transaction,

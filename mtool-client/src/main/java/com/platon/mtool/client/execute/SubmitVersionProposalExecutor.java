@@ -62,15 +62,16 @@ public class SubmitVersionProposalExecutor extends MtoolExecutor<SubmitVersionPr
         Proposal.createSubmitVersionProposalParam(
             validatorConfig.getNodePublicKey(), option.getPidId(),
             option.getNewversion(), option.getEndVotingRounds());
-    GasProvider gasProvider = proposalContract.getSubmitProposalGasProvider(proposal);
+    GasProvider gasProvider = checkGasPrice(proposalContract.getSubmitProposalGasProvider(proposal));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =
         proposalContract.submitProposalReturnTransaction(proposal, gasProvider).send();
     BaseResponse response = proposalContract.getTransactionResponse(transaction).send();
 
-    LogUtils.info(
-        logger, () -> Log.newBuilder().msg("SubmitVersionproposal").kv("response", response));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.SUBMIT_VERSION_PROPOSAL).kv("transaction", transaction));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.SUBMIT_VERSION_PROPOSAL).kv("response", response));
+
     ProgressBar.stop();
     echoResult(
         transaction,

@@ -89,7 +89,7 @@ public class ObserveStakingExecutor extends MtoolExecutor<StakingOption> {
                     .build();
 
     //检查账户是否够余额
-    GasProvider gasProvider = stakingContract.getStakingGasProvider(stakingParam);
+    GasProvider gasProvider = checkGasPrice(stakingContract.getStakingGasProvider(stakingParam));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), option.getAmount().getAmount(), gasProvider, web3j,option.getAmount().getAmountType());
 

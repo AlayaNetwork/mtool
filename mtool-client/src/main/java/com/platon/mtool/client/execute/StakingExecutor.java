@@ -77,7 +77,7 @@ public class StakingExecutor extends MtoolExecutor<StakingOption> {
             .setProcessVersion(web3j.getProgramVersion().send().getAdminProgramVersion())
             .setBlsProof(web3j.getSchnorrNIZKProve().send().getAdminSchnorrNIZKProve())
             .build();
-    GasProvider gasProvider = stakingContract.getStakingGasProvider(stakingParam);
+    GasProvider gasProvider = checkGasPrice(stakingContract.getStakingGasProvider(stakingParam));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), option.getAmount().getAmount(), gasProvider, web3j,option.getAmount().getAmountType());
 
@@ -86,8 +86,10 @@ public class StakingExecutor extends MtoolExecutor<StakingOption> {
     PlatonSendTransaction transaction = remoteCall.send();
 
     TransactionResponse response = stakingContract.getTransactionResponse(transaction).send();
+
     LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.STAKING).kv("transaction", transaction));
     LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.STAKING).kv("response", response));
+
     ProgressBar.stop();
 
     echoResult(

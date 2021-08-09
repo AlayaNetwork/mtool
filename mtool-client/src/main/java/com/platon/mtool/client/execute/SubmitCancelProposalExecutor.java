@@ -63,15 +63,16 @@ public class SubmitCancelProposalExecutor extends MtoolExecutor<SubmitCancelProp
             option.getPidId(),
             option.getEndVotingRounds(),
             option.getProposalid());
-    GasProvider gasProvider = proposalContract.getSubmitProposalGasProvider(proposal);
+    GasProvider gasProvider = checkGasPrice(proposalContract.getSubmitProposalGasProvider(proposal));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =
         proposalContract.submitProposalReturnTransaction(proposal, gasProvider).send();
     BaseResponse response = proposalContract.getTransactionResponse(transaction).send();
 
-    LogUtils.info(
-        logger, () -> Log.newBuilder().msg("SubmitCancelproposal").kv("response", response));
+    LogUtils.info(logger, () -> Log.newBuilder().msg("SubmitCancelproposal").kv("transaction", transaction));
+    LogUtils.info(logger, () -> Log.newBuilder().msg("SubmitCancelproposal").kv("response", response));
+
     ProgressBar.stop();
     echoResult(
         transaction,

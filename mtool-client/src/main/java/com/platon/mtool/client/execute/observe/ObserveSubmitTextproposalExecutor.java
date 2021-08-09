@@ -70,7 +70,7 @@ public class ObserveSubmitTextproposalExecutor extends MtoolExecutor<SubmitTextP
     Proposal proposal =
         Proposal.createSubmitTextProposalParam(
             validatorConfig.getNodePublicKey(), option.getPidId());
-    GasProvider gasProvider = proposalContract.getSubmitProposalGasProvider(proposal);
+    GasProvider gasProvider = checkGasPrice(proposalContract.getSubmitProposalGasProvider(proposal));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =

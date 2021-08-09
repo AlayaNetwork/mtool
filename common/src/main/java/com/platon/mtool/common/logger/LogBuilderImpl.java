@@ -1,6 +1,7 @@
 package com.platon.mtool.common.logger;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.ValueFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +27,26 @@ public class LogBuilderImpl implements Log.Builder {
   public Log.Builder kv(String key, Object value) {
     if (value instanceof String) {
       params.put(key, value);
+      if ("privateKey".equalsIgnoreCase(key) || "crypto".equalsIgnoreCase(key)){
+        params.put(key, "_ignored_");
+      }
     } else {
       params.put(key, JSON.toJSONString(value));
+      ValueFilter filter = new PrivateKeyFilter();
+      params.put(key, JSON.toJSONString(value, filter));
     }
     return this;
+  }
+
+  class PrivateKeyFilter implements ValueFilter {
+
+    @Override
+    public Object process(Object object, String name, Object value) {
+      if ("privateKey".equalsIgnoreCase(name) || "crypto".equalsIgnoreCase(name)){
+        return "_ignored_";
+      }
+      return value;
+    }
   }
 
   @Override

@@ -53,8 +53,7 @@ public class UnstakingExecutor extends MtoolExecutor<UnstakingOption> {
 
     StakingContract stakingContract =
         getStakingContract(web3j, credentials);
-    GasProvider gasProvider =
-        stakingContract.getUnStakingGasProvider(validatorConfig.getNodePublicKey());
+    GasProvider gasProvider = checkGasPrice(stakingContract.getUnStakingGasProvider(validatorConfig.getNodePublicKey()));
     blockChainService.validBalanceEnough(
         option.getKeystore().getAddress(), BigInteger.ZERO, gasProvider, web3j, StakingAmountType.FREE_AMOUNT_TYPE);
     PlatonSendTransaction transaction =
@@ -63,7 +62,9 @@ public class UnstakingExecutor extends MtoolExecutor<UnstakingOption> {
             .send();
     TransactionResponse response = stakingContract.getTransactionResponse(transaction).send();
 
-    LogUtils.info(logger, () -> Log.newBuilder().msg("Unstaking").kv("response", response));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.UNSTAKING).kv("transaction", transaction));
+    LogUtils.info(logger, () -> Log.newBuilder().msg(AllCommands.UNSTAKING).kv("response", response));
+
     ProgressBar.stop();
     echoResult(
         transaction,
