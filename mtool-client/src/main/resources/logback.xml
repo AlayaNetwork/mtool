@@ -5,7 +5,7 @@
 
 <configuration>
     <property name="log_path" value="${user.home}/.mtool-client/logs"/>
-    <property name="log_level" value="debug"/>
+    <property name="log_level" value="off"/>
     <if condition='property("os.name").contains("OS X")'>
         <then>
             <property name="log_path" value="${user.home}/Library/MtoolClient/logs"/>
@@ -34,11 +34,11 @@
     </appender>
 
     <logger name="com.platon.tx.PlatOnContract">
-        <level value="debug" />
+        <level value="off" />
     </logger>
 
     <logger name="com.platon.protocol.http.HttpService">
-        <level value="debug" />
+        <level value="off" />
     </logger>
 
     <root>
